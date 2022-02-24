@@ -4,6 +4,7 @@ import './App.css';
 import FriendsList from './components/Friendslist';
 import LoginForm from './components/Login';
 import axiosWithAuth from './axios';
+import AddFriend from './components/addFriends';
 
 const friendsUrl = 'http://localhost:9000/api/friends'
 const loginUrl = 'http://localhost:9000/api/login'
@@ -26,34 +27,46 @@ function App() {
     })
   }
 
+  const logout = () => {
+    window.localStorage.removeItem('token')
+    navigate('/')
+  }
+
   const getFriends = () =>{
     axiosWithAuth().get(friendsUrl)
     .then(res=>{
         setFriends(res.data)
       })
       .catch(err=>{
-        debugger
+        navigate('/')
       })
 
+  }
+  const appFriend = ({ username, age, email }) => {
+    axiosWithAuth().post(friendsUrl, { username, email, age})
+    .then(res => {
+      setFriends(...friends, res.data)
+    })
+    .catch(err => {
+      navigate('/')
+    })
   }
 
   return (
     <div className="App">
       <h2>Client Auth Project</h2>
+      <button id="logout" onClick={logout}>Logout</button>
       <nav>
         <NavLink to="/">Login</NavLink>
         <NavLink to="/friendslist" >Friendlist</NavLink>
-        <NavLink to="/">AddFriend</NavLink>
-        <NavLink to="/">Logout</NavLink>
+        <NavLink to="/friends/add">AddFriend</NavLink>
+       
        
       </nav>
       <Routes>
         <Route path="/" element={<LoginForm login={login} />} />
-        <Route path="friendslist" element={
-          <>
-          <FriendsList getFriends={getFriends} friends={friends} />
-          </>
-        } />
+        <Route path="friendslist" element={ <FriendsList getFriends={getFriends} friends={friends} /> } />
+        <Route path="friends/add" element={ <AddFriend addFriend={appFriend} friends={friends}/>}/>
       </Routes>
       
       

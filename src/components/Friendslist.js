@@ -11,7 +11,7 @@ export default function FriendsList(props) {
         <div>
             <h2>FRIEND LIST:</h2>
           {friends.map(friend => 
-              <h2>{friend.name || friend.username}</h2>
+              <h2 key={friend.id}>{friend.name || friend.username}</h2>
           )}  
         </div>
             

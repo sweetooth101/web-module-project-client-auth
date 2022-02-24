@@ -36,7 +36,7 @@ export default function LoginForm(props) {
         placeholder="Enter password"
         id="password"
       />
-      <button id="submitCredentials">Submit credentials</button>
+      <button id="submitCredentials">Submit</button>
     </form>
   )
 }
